@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import authService from "../appwrite/config";
 import { Container, PostCard } from "../components";
+import { useSelector } from "react-redux";
 
 function Home() {
   const [posts, setPosts] = useState([]);
+  const Login = useSelector((state) => state.auth.status);
 
   useEffect(() => {
     authService.getPosts().then((post) => {
@@ -19,9 +21,11 @@ function Home() {
         <Container>
           <div className="flex flex-wrap">
             <div className="p-2 w-full">
-              <h1 className="text-2xl font-bold hover:text-gray-500">
-                Login to read posts
-              </h1>
+              {Login ? null : (
+                <h1 className="text-2xl font-bold hover:text-gray-500">
+                  Login to see posts
+                </h1>
+              )}
             </div>
           </div>
         </Container>
@@ -29,18 +33,18 @@ function Home() {
     );
   }
   return (
-    <div className='w-full py-8'>
-        <Container>
-            <div className='flex flex-wrap'>
-                {posts.map((post) => (
-                    <div key={post.$id} className='p-2 w-1/4'>
-                        <PostCard {...post} /* post={post} */ />
-                    </div>
-                ))}
+    <div className="w-full py-8">
+      <Container>
+        <div className="flex flex-wrap">
+          {posts.map((post) => (
+            <div key={post.$id} className="p-2 w-1/4">
+              <PostCard {...post} /* post={post} */ />
             </div>
-        </Container>
+          ))}
+        </div>
+      </Container>
     </div>
-)
+  );
 }
 
 export default Home;
