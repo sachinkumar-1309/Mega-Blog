@@ -25,14 +25,14 @@ function Home() {
                 <h1 className="text-2xl font-bold hover:text-gray-500">
                   Login to see posts
                 </h1>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        </Container>
-      </div>
-    );
-  }
-  return (
+          </Container>
+        </div>
+      );
+    }
+    return (
     <div className="w-full py-8">
       <Container>
         <div className="flex flex-wrap">

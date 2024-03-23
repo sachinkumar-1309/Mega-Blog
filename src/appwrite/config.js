@@ -141,18 +141,18 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  async createPost({ title, slug, content, featuredImage, status, userId }) {
+  async createPost({ titles, slug, content, featuredImage, status, userID }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
         slug,
         {
-          title,
+          titles,
           content,
           featuredImage,
           status,
-          userId,
+          userID,
         }
       );
     } catch (error) {
@@ -160,14 +160,14 @@ export class Service {
     }
   }
 
-  async updatePost(slug, { title, content, featuredImage, status }) {
+  async updatePost(slug, { titles, content, featuredImage, status }) {
     try {
       return await this.databases.updateDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
         slug,
         {
-          title,
+          titles,
           content,
           featuredImage,
           status,

@@ -8,7 +8,7 @@ export default function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
-        title: post?.title || "",
+        titles: post?.titles || "",
         slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
@@ -36,7 +36,8 @@ export default function PostForm({ post }) {
     } else {
       const file = await appewriteService.uploadFile(data.image[0]);
       if (file) {
-        data.featuredImage = file.$id;
+        const fileId = file.$id;
+        data.featuredImage = fileId;
         const dbPost = await appewriteService.createPost({
           ...data,
           userId: userData.$id,
@@ -55,8 +56,8 @@ export default function PostForm({ post }) {
 
   React.useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === "title") {
-        setValue("slug", slugTransform(value.title), { shouldValidate: true });
+      if (name === "titles") {
+        setValue("slug", slugTransform(value.titles), { shouldValidate: true });
       }
     });
     return () => {
@@ -71,7 +72,7 @@ export default function PostForm({ post }) {
           label="Title :"
           placeholder="Title"
           className="mb-4"
-          {...register("title", { required: true })}
+          {...register("titles", { required: true })}
         />
         <Input
           label="Slug :"
@@ -86,7 +87,6 @@ export default function PostForm({ post }) {
         />
         <RTE
           label="Content :"
-          apiKey="s0vbv6336od5pwh5tsy9hput5edoyvzb1qnnshj6mmawbm11"
           name="content"
           control={control}
           defaultValue={getValues("content")}
@@ -103,8 +103,8 @@ export default function PostForm({ post }) {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
-              alt={post.title}
+              src={appewriteService.getFilePreview(post.featuredImage)}
+              alt={post.titles}
               className="rounded-lg"
             />
           </div>
