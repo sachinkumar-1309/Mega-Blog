@@ -8,8 +8,7 @@
 
 // const account = new Account(client);
 
-// const user = await account.create(ID.unique(), "email@example.com", "password");
-//  KUCH ISSUE HAI ISKO OR V BETTER BANA K USE KIYA JA SKTA THA
+// const user = await account.create(ID.unique(), "email@example.com", "password")
 
 // export class AuthService {
 //   client = new Client();

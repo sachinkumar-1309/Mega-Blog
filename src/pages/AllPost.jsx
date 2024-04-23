@@ -17,6 +17,7 @@ function AllPost() {
           {posts.map((post) => (
             <div key={post.$id} className="p-2 w-1/2">
               <PostCard {...post} />
+              {/* {console.log("Posts: "+ post.titles)} */}
             </div>
           ))}
         </div>
