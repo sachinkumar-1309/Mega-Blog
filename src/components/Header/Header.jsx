@@ -107,7 +107,7 @@ function Header() {
   ];
 
   return (
-    <header className="py-3 shadow bg-gray-500">
+    <header className="w-full py-3 shadow bg-gray-500">
       <div className="w-full max-w-7xl mx-auto px-4">
         <nav className="flex">
           <div className="mr-4">
