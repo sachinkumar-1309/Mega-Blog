@@ -15,35 +15,53 @@ function Home() {
     });
   }, []);
 
-  if (posts.length === 0) {
-    return (
-      <div className="w-full py-8 mt-4 text-center">
-        <Container>
-          <div className="flex flex-wrap">
-            <div className="p-2 w-full">
-              {Login ? null : (
-                <h1 className="text-2xl font-bold hover:text-gray-500">
-                  Login to see posts
-                </h1>
+  // if (posts.length === 0) {
+  //   return (
+  //     <div className="w-full py-8 mt-4 text-center">
+  //       <Container>
+  //         <div className="flex flex-wrap">
+  //           <div className="p-2 w-full">
+  //             {Login ? null : (
+  //               <h1 className="text-2xl font-bold hover:text-gray-500">
+  //                 Login to see posts
+  //               </h1>
+  //             )}
+  //           </div>
+  //         </div>
+  //       </Container>
+  //     </div>
+  //   );
+  // }
+  return (
+    <>
+      {Login ? (
+        <div className="w-full py-8">
+          <Container>
+            <div className="sm:flex flex-wrap">
+              {posts.map((post) => (
+                <div key={post.$id} className="p-2 w-full sm:w-1/4">
+                  <PostCard {...post} /* post={post} */ />
+                </div>
+              ))}
+            </div>
+          </Container>
+        </div>
+      ) : (
+        <div className="w-full py-8 mt-4 text-center">
+          <Container>
+            <div className="flex flex-wrap">
+              <div className="p-2 w-full">
+                {Login ? null : (
+                  <h1 className="text-2xl text-white font-bold hover:text-gray-100">
+                    Login to see posts
+                  </h1>
                 )}
               </div>
             </div>
           </Container>
         </div>
-      );
-    }
-    return (
-    <div className="w-full py-8">
-      <Container>
-        <div className="sm:flex flex-wrap">
-          {posts.map((post) => (
-            <div key={post.$id} className="p-2 w-full sm:w-1/4">
-              <PostCard {...post} /* post={post} */ />
-            </div>
-          ))}
-        </div>
-      </Container>
-    </div>
+      )}
+    </>
   );
 }
 

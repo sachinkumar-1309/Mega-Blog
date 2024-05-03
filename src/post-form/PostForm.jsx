@@ -68,17 +68,17 @@ export default function PostForm({ post }) {
   return (
     <Container>
       <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-        <div className="w-2/3 px-2">
+        <div className="sm:w-2/3 w-full sm:px-2 px-">
           <Input
             label="Title :"
             placeholder="Title"
-            className="mb-4 "
+            className="sm:mb-4 mb-2"
             {...register("titles", { required: true })}
           />
           <Input
             label="Slug :"
             placeholder="Slug"
-            className="mb-4 "
+            className="sm:mb-4 mb-2"
             {...register("slug", { required: true })}
             onInput={(e) => {
               setValue("slug", slugTransform(e.currentTarget.value), {
@@ -93,7 +93,7 @@ export default function PostForm({ post }) {
             defaultValue={getValues("content")}
           />
         </div>
-        <div className="w-1/3 px-2">
+        <div className="sm:w-1/3 w-full px-2 mt-3 sm:mt-0">
           <Input
             label="Featured Image :"
             type="file"

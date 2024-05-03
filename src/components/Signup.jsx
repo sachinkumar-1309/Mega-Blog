@@ -27,18 +27,18 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center w-full mb-3">
+    <div className="flex items-center justify-center w-full mb-3 p-1 sm:p-0 mt-3 sm:mt-0">
       <div
-        className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10 `}>
-        <div className="mb-2 flex justify-center">
-          <span className="inline-block w-full max-w-[100px]">
+        className={`mx-auto w-full max-w-lg bg-gray-200 rounded-xl p-4 sm:p-10 border border-black/10 `}>
+        <div className="mb-2 flex justify-center items-center" >
+          <span className="inline-block w-full mx-auto max-w-[100px]">
             <Logo width="100%" />
           </span>
         </div>
-        <h2 className="text-center text-2xl font-bold leading-tight">
+        <h2 className="text-center text-xl sm:text-2xl font-bold leading-tight">
           Sign up to create account
         </h2>
-        <p className="mt-2 text-center text-base text-black/60">
+        <p className="mt-2 text-center  text-md sm:text-xl text-black/60">
           Already have an account?&nbsp;
           <Link
             className="font-medium text-primary transition-all duration-200 hover:underline "
@@ -57,7 +57,7 @@ function Signup() {
               })}
             />
             <Input
-              label="Email:  "
+              label="Email "
               placeholder="Enter your email"
               type="email"
               {...register("email", {
