@@ -39,29 +39,21 @@ body {
 }
 
 .read-the-docs {
-  color: #888;
+  color: #000000;
 }
 
 .ant-drawer-body {
-  background-color: #9ca3af;
-  color: #fff;
+  border-top: 2px solid #5e646d;
+  background-color: #000000d6;
   font-weight: 600;
   font-size: larger;
   height: calc(100vh);
   padding: 0px !important;
 }
 .ant-drawer-header {
-  background-color: rgba(69, 60, 150, 0.612);
+  background-color: rgb(39, 39, 39);
 }
 
-.ant-drawer-close {
+.ant-drawer-close  {
   color: #fff !important;
-
-}
-.ant-drawer-close:hover{
-  color:#fadb14 !important
-}
-
-.updateButton::hover {
-  background-color: red !important;
 }

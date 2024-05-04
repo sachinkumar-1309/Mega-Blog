@@ -67,7 +67,7 @@ export default function PostForm({ post }) {
 
   return (
     <Container>
-      <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
+      <form onSubmit={handleSubmit(submit)} className="flex flex-wrap text-blue-200 mt-2">
         <div className="sm:w-2/3 w-full sm:px-2 px-">
           <Input
             label="Title :"
@@ -75,7 +75,7 @@ export default function PostForm({ post }) {
             className="sm:mb-4 mb-2"
             {...register("titles", { required: true })}
           />
-          <Input
+          {/* <Input
             label="Slug :"
             placeholder="Slug"
             className="sm:mb-4 mb-2"
@@ -85,7 +85,7 @@ export default function PostForm({ post }) {
                 shouldValidate: true,
               });
             }}
-          />
+          /> */}
           <RTE
             label="Content :"
             name="content"
