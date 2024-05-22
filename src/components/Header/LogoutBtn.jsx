@@ -9,7 +9,7 @@ function LogoutBtn({className}) {
     authService.logout().then(() => dispatch(logout()));
   };
   return (
-    <button onClick={logoutHandler } className={`px-6 py-2 duration-200
+    <button onClick={logoutHandler } className={`duration-200
     ${className}`}>
       Log out
     </button>
