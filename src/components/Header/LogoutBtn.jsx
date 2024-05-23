@@ -9,7 +9,7 @@ function LogoutBtn({className}) {
     authService.logout().then(() => dispatch(logout()));
   };
   return (
-    <button onClick={logoutHandler } className={`duration-200
+    <button onClick={logoutHandler } className={`duration-200 border border-red-700
     ${className}`}>
       Log out
     </button>
