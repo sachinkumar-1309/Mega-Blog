@@ -15,12 +15,14 @@ export default function PostForm({ post }) {
 				status: post?.status || "active",
 			},
 		});
+	
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false);
 	const userData = useSelector((state) => state.auth.userData);
+	const [post1, setPost] = useState(post);
 
-	{
-	}
 	const submit = async (data) => {
+		setIsLoading(true);
 		if (post) {
 			const file = data.image[0]
 				? await appewriteService.uploadFile(data.image[0])
@@ -29,8 +31,8 @@ export default function PostForm({ post }) {
 				appewriteService.deleteFile(post.featuredImage);
 			}
 			const dbPost = await appewriteService.updatePost(post.$id, {
-				...data,
 				featuredImage: file ? file.$id : undefined,
+				...data,
 			});
 			console.log("Update post:" + file);
 			if (dbPost) {
@@ -50,6 +52,7 @@ export default function PostForm({ post }) {
 				}
 			}
 		}
+		setIsLoading(false);
 	};
 	const slugTransform = useCallback((value) => {
 		if (value && typeof value === "string")
@@ -72,20 +75,25 @@ export default function PostForm({ post }) {
 
 	return (
 		<Container>
+			{console.log("Get values: " + JSON.stringify(getValues("content")))}
+			{/* {console.log("Submit: "+submit)} */}
 			<form
 				onSubmit={handleSubmit(submit)}
-				className="flex flex-wrap text-blue-200 mt-2">
-				<div className="sm:w-2/5 w-full sm:px-2 px-">
-					<div className="w-1/">
+				className="flex flex-wrap text-blue-200 mt-2 relative pb-14">
+				<div className="lg:w-2/5 md:w-1/2 w-full sm:px-2 ">
+					<div className="">
+						{console.log("Title: ", post.titles)}
 						<Input
 							label="Title"
-							onChange={(e) => setTitle(e.target.value)}
+							value={post?.title}
 							placeholder="Title"
 							className="sm:mb-4 mb-2 inline-block items-start"
-							{...register("titles", { required: true })}
+							{...register("titles", {
+								required: true,
+								onChange: (e) => console.log(e),
+							})}
 						/>
 					</div>
-
 					<Input
 						label="Featured Image"
 						type="file"
@@ -110,12 +118,14 @@ export default function PostForm({ post }) {
 					/>
 					<Button
 						type="submit"
-						bgColor={post ? "bg-green-500" : "bg-[#4b5563]"}
-						className="w-full ">
+						bgColor={
+							post ? "bg-green-500" : "bg-[#1e3a8a] hover:bg-[#1f409a]"
+						}
+						className="w-full absolute md:relative left-0 bottom-0 ">
 						{post ? "Update" : "Submit"}
 					</Button>
 				</div>
-				<div className="sm:w-3/5 w-full px-2 mt-3 sm:mt-0">
+				<div className="lg:w-3/5 md:w-1/2 w-full mt-3 sm:mt-0 ">
 					<RTE
 						label="Content"
 						name="content"
@@ -124,6 +134,12 @@ export default function PostForm({ post }) {
 					/>{" "}
 				</div>
 			</form>
+			{isLoading && (
+				<div className="flex justify-center mt-4 text-gray-200">
+					<div className="loader"></div>
+					<p className="ml-2">This may take a moment, please wait...</p>
+				</div>
+			)}
 		</Container>
 	);
 }
