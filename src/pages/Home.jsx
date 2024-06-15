@@ -35,7 +35,7 @@ function Home() {
 		<>
 			{" "}
 			{Login ? (
-				<div className="w-full min-h-[calc(100vh-100px)]">
+				<div className="w-full">
 					<div className="capitalize mt-10">
 						<p className="text-xs text-gray-300">Our blogs</p>
 						<h1 className="text-4xl font-extrabold text-[#d9e3f3]">
@@ -45,8 +45,8 @@ function Home() {
 							Stay Updated with the Hottest Trends and Insights
 						</p>
 					</div>
-					<div className="relative w-[65vw] flex mx-auto my-14 p-2 bg-gree-300 h-[580px]">
-						<div className="w-[45%] border-current rounded h-full border-2 border-white p-2">
+					<div className="relative sm:w-[80vw] w-[90vw] xl:flex mx-auto my-14 p-2 bg-gree-300 xl:h-[580px]">
+						<div className="xl:w-[45%] w-full  border-current rounded h-full border-2 border-white p-2">
 							<Link to={`${Login ? `/post/${posts[0]?.$id}` : "/login"}`}>
 								{/* <PostCard {...posts[0] } className="height-[600px]"/> */}
 								<img
@@ -73,9 +73,9 @@ function Home() {
 									<h4 className="lg:text-sm text-md text-[#909090] tracking-tight pb-4 truncate">
 										{sanitizedContent}
 									</h4>
-									<div className="flex items-center text-gray-300 mt-1.5">
-										<div className="w-[55px] h-[55px] rounded-full border-2 border-white bg-gray-400"></div>
-										<div className="block pl-4  leading-4">
+									<div className="flex items-center text-gray-300 mt-1.5 pb-4 sm:pb-0">
+										<div className="s:w-[55px] s:h-[55px] w-[48px] h-[48px] rounded-full border-2 border-white bg-gray-400"></div>
+										<div className="block pl-4 leading-4">
 											<span className="text-md">Sachin kumar</span>
 											<br />
 											<span className="text-xs">29 may 2022</span>
@@ -84,13 +84,13 @@ function Home() {
 								</div>
 							</Link>
 						</div>
-						<div className="w-[65%] p-2 shadow shadow-[#171717]">
+						<div className="xl:w-[60%] w-[102%] sm:w-[100%] s:p-2 p-1 mt-8 xl:mt-0 shadow shadow-[#171717]">
 							<HomeSideBox post={posts[1]} />
 							<HomeSideBox post={posts[2]} />
 							<HomeSideBox post={posts[3]} />
 						</div>
 						<Link to={`/all-posts`}>
-							<div className="absolute text-right -bottom-6 -right-20 mx-auto">
+							<div className="absolute text-right -bottom-6 sm:-right-20 right-0 mx-auto">
 								<span className="text-gray-300 ">more...</span>
 							</div>
 						</Link>
