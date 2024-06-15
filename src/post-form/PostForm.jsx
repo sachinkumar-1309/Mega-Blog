@@ -1,66 +1,87 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import appewriteService from "../appwrite/config";
 import { Input, RTE, Select, Button, Container } from "../components/index";
 
 export default function PostForm({ post }) {
-	const { register, handleSubmit, watch, setValue, control, getValues } =
-		useForm({
-			defaultValues: {
-				titles: post?.titles || "",
-				slug: post?.$id || "",
-				content: post?.content || "",
-				status: post?.status || "active",
-			},
-		});
-	
+	const {
+		register,
+		handleSubmit,
+		watch,
+		setValue,
+		control,
+		getValues,
+		reset,
+	} = useForm({
+		defaultValues: {
+			titles: post?.titles || "",
+			slug: post?.$id || "",
+			content: post?.content || "",
+			status: post?.status || "active",
+		},
+	});
+
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
 	const userData = useSelector((state) => state.auth.userData);
-	const [post1, setPost] = useState(post);
+
+	useEffect(() => {
+		if (post) {
+			reset({
+				titles: post.titles,
+				slug: post.$id,
+				content: post.content,
+				status: post.status,
+			});
+		}
+	}, [post, reset]);
 
 	const submit = async (data) => {
 		setIsLoading(true);
-		if (post) {
-			const file = data.image[0]
+		try {
+			let file = data.image[0]
 				? await appewriteService.uploadFile(data.image[0])
 				: null;
-			if (file) {
-				appewriteService.deleteFile(post.featuredImage);
-			}
-			const dbPost = await appewriteService.updatePost(post.$id, {
-				featuredImage: file ? file.$id : undefined,
-				...data,
-			});
-			console.log("Update post:" + file);
-			if (dbPost) {
-				navigate(`/post/${dbPost.$id}`);
-			}
-		} else {
-			const file = await appewriteService.uploadFile(data.image[0]);
-			if (file) {
-				const fileId = file.$id;
-				data.featuredImage = fileId;
-				const dbPost = await appewriteService.createPost({
+			if (post) {
+				if (file) {
+					await appewriteService.deleteFile(post.featuredImage);
+				}
+				const dbPost = await appewriteService.updatePost(post.$id, {
+					featuredImage: file ? file.$id : undefined,
 					...data,
-					userID: userData.$id,
 				});
 				if (dbPost) {
 					navigate(`/post/${dbPost.$id}`);
 				}
+			} else {
+				file = await appewriteService.uploadFile(data.image[0]);
+				if (file) {
+					const dbPost = await appewriteService.createPost({
+						...data,
+						userID: userData.$id,
+						featuredImage: file.$id,
+					});
+					if (dbPost) {
+						navigate(`/post/${dbPost.$id}`);
+					}
+				}
 			}
+		} catch (error) {
+			console.error("Error submitting form: ", error);
+		} finally {
+			setIsLoading(false);
 		}
-		setIsLoading(false);
 	};
+
 	const slugTransform = useCallback((value) => {
 		if (value && typeof value === "string")
 			return value.toLowerCase().replace(/[^a-zA-Z\d]+/g, "-");
 		return "";
 	}, []);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const subscription = watch((value, { name }) => {
 			if (name === "titles") {
 				setValue("slug", slugTransform(value.titles), {
@@ -75,22 +96,17 @@ export default function PostForm({ post }) {
 
 	return (
 		<Container>
-			{console.log("Get values: " + JSON.stringify(getValues("content")))}
-			{/* {console.log("Submit: "+submit)} */}
 			<form
 				onSubmit={handleSubmit(submit)}
 				className="flex flex-wrap text-blue-200 mt-2 relative pb-14">
 				<div className="lg:w-2/5 md:w-1/2 w-full sm:px-2 ">
 					<div className="">
-						{console.log("Title: ", post.titles)}
 						<Input
 							label="Title"
-							value={post?.title}
 							placeholder="Title"
 							className="sm:mb-4 mb-2 inline-block items-start"
 							{...register("titles", {
 								required: true,
-								onChange: (e) => console.log(e),
 							})}
 						/>
 					</div>
@@ -125,7 +141,7 @@ export default function PostForm({ post }) {
 						{post ? "Update" : "Submit"}
 					</Button>
 				</div>
-				<div className="lg:w-3/5 md:w-1/2 w-full mt-3 sm:mt-0 ">
+				<div className="lg:w-3/5 md:w-1/2 w-full mt-3 sm:mt-0">
 					<RTE
 						label="Content"
 						name="content"
@@ -133,11 +149,18 @@ export default function PostForm({ post }) {
 						defaultValue={getValues("content")}
 					/>{" "}
 				</div>
-			</form>
-			{isLoading && (
-				<div className="flex justify-center mt-4 text-gray-200">
+
+				{/* <div className="absolute h-screen w-full z-10 m-0 p-0  flex justify-center items-center text-gray-100">
 					<div className="loader"></div>
 					<p className="ml-2">This may take a moment, please wait...</p>
+				</div> */}
+			</form>
+			{isLoading && (
+				<div className="fixed top-0 left-0 z-50 w-full h-full flex justify-center items-center bg-opacity-50 bg-gray-800">
+					<div className="loader"></div>
+					<p className="ml-2 text-gray-200">
+						This may take a moment, please wait...
+					</p>
 				</div>
 			)}
 		</Container>
