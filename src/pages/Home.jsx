@@ -3,7 +3,8 @@ import authService from "../appwrite/config";
 import auth from "../appwrite/auth";
 import { Container, PostCard } from "../components";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, json } from "react-router-dom";
+import HomeSideBox from "@/components/HomeSideBox";
 
 function Home() {
 	const [posts, setPosts] = useState([]);
@@ -24,41 +25,76 @@ function Home() {
 			setToView(false);
 		}, 2000);
 	};
-	// const user = auth.getCurrentUser();
+	const stripHtmlTags = (str) => {
+		if (!str) return "";
+		return str.replace(/<\/?[^>]+(>|$)/g, "");
+	};
+	const sanitizedContent = stripHtmlTags(posts[0]?.content);
 
-	// if (posts.length === 0) {
-	//   return (
-	//     <div className="w-full py-8 mt-4 text-center">
-	//       <Container>
-	//         <div className="flex flex-wrap">
-	//           <div className="p-2 w-full">
-	//             {Login ? null : (
-	//               <h1 className="text-2xl font-bold hover:text-gray-500">
-	//                 Login to see posts
-	//               </h1>
-	//             )}
-	//           </div>
-	//         </div>
-	//       </Container>
-	//     </div>
-	//   );
-	// }
 	return (
 		<>
+			{" "}
 			{Login ? (
-				<div className="w-[90vw] mx-auto py-8 pb-10">
-					<>
-						<div className="sm:flex flex-wrap">
-							{posts.map((post) => (
-								<div
-									key={post.$id}
-									className="p-2 min-h-[345px] w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
-									<PostCard {...post} /* post={post} */ />
-									{/* {console.log("User: " + user)} */}
+				<div className="w-full min-h-[calc(100vh-100px)]">
+					<div className="capitalize mt-10">
+						<p className="text-xs text-gray-300">Our blogs</p>
+						<h1 className="text-4xl font-extrabold text-[#d9e3f3]">
+							stories and ideas
+						</h1>
+						<p className="text-sm text-gray-500">
+							Stay Updated with the Hottest Trends and Insights
+						</p>
+					</div>
+					<div className="relative w-[65vw] flex mx-auto my-14 p-2 bg-gree-300 h-[580px]">
+						<div className="w-[45%] border-current rounded h-full border-2 border-white p-2">
+							<Link to={`${Login ? `/post/${posts[0]?.$id}` : "/login"}`}>
+								{/* <PostCard {...posts[0] } className="height-[600px]"/> */}
+								<img
+									src={authService.getFilePreview(posts[0]?.featuredImage)}
+									alt={posts[0]?.titles}
+									className="rounded-t-[12px] rounded-b-lg h-[60%] duration-300 rounded-sm w-full object-cover hover:brightness-110"
+								/>
+								<div className="text-left px-4 pt-6">
+									<button
+										className={`flex items-center
+					${posts[0]?.status !== "active" ? "bg-red-50" : " bg-[#f0fdf4] "}
+					mb-2 px-3 py-[2px] rounded-full font- text-black text-left cursor-default`}>
+										<div
+											className={`${
+												posts[0]?.status !== "active"
+													? "bg-red-400"
+													: "bg-green-400"
+											} mr-2  rounded-full h-3 w-3 `}></div>
+										{posts[0]?.status}
+									</button>
+									<h2 className="lg:text-3xl text-xl tracking-wider font-semibold text-gray-100 -4 truncate">
+										{posts[0]?.titles}
+									</h2>
+									<h4 className="lg:text-sm text-md text-[#909090] tracking-tight pb-4 truncate">
+										{sanitizedContent}
+									</h4>
+									<div className="flex items-center text-gray-300 mt-1.5">
+										<div className="w-[55px] h-[55px] rounded-full border-2 border-white bg-gray-400"></div>
+										<div className="block pl-4  leading-4">
+											<span className="text-md">Sachin kumar</span>
+											<br />
+											<span className="text-xs">29 may 2022</span>
+										</div>
+									</div>
 								</div>
-							))}
+							</Link>
 						</div>
-					</>
+						<div className="w-[65%] p-2 shadow shadow-[#171717]">
+							<HomeSideBox post={posts[1]} />
+							<HomeSideBox post={posts[2]} />
+							<HomeSideBox post={posts[3]} />
+						</div>
+						<Link to={`/all-posts`}>
+							<div className="absolute text-right -bottom-6 -right-20 mx-auto">
+								<span className="text-gray-300 ">more...</span>
+							</div>
+						</Link>
+					</div>
 				</div>
 			) : (
 				<Container>
@@ -79,7 +115,12 @@ function Home() {
 										className="text-gray-500 text-xs cursor-pointer">
 										Skip signup ?<br />
 										<span className={`${toView ? "block" : "hidden"}`}>
-											email: test@gmail.com || password: test1234
+											email:{" "}
+											<strong className="text-gray-200">
+												test@gmail.com
+											</strong>{" "}
+											|| password:{" "}
+											<strong className="text-gray-200"> test1234</strong>
 										</span>
 										<br />
 									</p>
@@ -92,5 +133,4 @@ function Home() {
 		</>
 	);
 }
-
 export default Home;
